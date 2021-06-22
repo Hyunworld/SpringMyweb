@@ -29,8 +29,8 @@
 
                         <div class="collapse navbar-collapse" id="myNavbar">
                             <ul class="nav navbar-nav">
-                                <li class="active"><a href="#">Main</a></li>
-                                <li><a href="#">자유게시판</a></li>
+                                <li class="active"><a href="${pageContext.request.contextPath }">Main</a></li>
+                                <li><a href="${pageContext.request.contextPath }/freeBoard/freeList">자유게시판</a></li>
                                 <!-- 
 				<li><a href="#">강의</a></li>
                                 <li><a href="#">Form</a></li>

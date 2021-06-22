@@ -34,15 +34,16 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"  />	
 		<!-- xml매퍼의 위치 지정 -->
-		<!-- 
+		 
 		<property name="mapperLocations" value="classpath:/sqlmap/*.xml" />
-		 -->
+		 
+		 
 		<!-- 마이바티스 xml설정의 위치 지정 -->
 		<property name="configLocation" value="classpath:/mybatis-config/mybatis-config.xml"/>
 	</bean>
 	
 	<!-- 마이바티스의 인터페이스를 읽어서 사용할수 있도록 처리. -->
-	<mybatis-spring:scan base-package="com.team404.*"/>
+	<mybatis-spring:scan base-package="com.team404.*.mapper"/>
 
 	
 	
