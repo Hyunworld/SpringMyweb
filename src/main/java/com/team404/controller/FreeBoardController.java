@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team404.command.FreeBoardVO;
 import com.team404.freeboard.service.FreeBoardService;
+import com.team404.util.Criteria;
+import com.team404.util.PageVO;
 
 @Controller
 @RequestMapping("/freeBoard")
@@ -24,12 +26,28 @@ public class FreeBoardController {
 	
 	//리스트화면
 	@RequestMapping("/freeList")
-	public String freeList(Model model) {
+	public String freeList(Model model, Criteria cri) {
 		
-		ArrayList<FreeBoardVO> list = freeService.getList();
+//		//게시판기본
+//		ArrayList<FreeBoardVO> list = freeService.getList();
+//		model.addAttribute("list", list); //화면에서 전달(여러값이라면 맵으로 가능)
 		
-		model.addAttribute("list", list); //화면에서 전달(여러값이라면 맵으로 가능)
+		//페이지
+//		ArrayList<FreeBoardVO> list = freeService.getList(cri);
+//		int total = freeService.getTotal();
+//		PageVO pageVO = new PageVO(cri, total);
 		
+		//검색페이징
+		ArrayList<FreeBoardVO> list = freeService.getList(cri);
+		int total = freeService.getTotal(cri);
+		PageVO pageVO = new PageVO(cri, total);
+		
+		System.out.println(cri.toString());
+		
+		System.out.println(pageVO.toString());
+		model.addAttribute("pageVO", pageVO);
+		model.addAttribute("list",list);
+
 
 		return "freeBoard/freeList";
 	}

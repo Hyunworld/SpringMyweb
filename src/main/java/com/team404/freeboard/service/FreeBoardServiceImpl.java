@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.team404.command.FreeBoardVO;
 import com.team404.freeboard.mapper.FreeBoardMapper;
+import com.team404.util.Criteria;
 
 @Service("freeService") //componentscan
 public class FreeBoardServiceImpl implements FreeBoardService {
@@ -20,9 +21,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public ArrayList<FreeBoardVO> getList() {
+	public ArrayList<FreeBoardVO> getList(Criteria cri) {
 		
-		return freeMapper.getList();
+		return freeMapper.getList(cri);
 	}
 
 	@Override
@@ -40,6 +41,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public int delete(int bno) {
 		
 		return freeMapper.delete(bno);
+	}
+
+
+	@Override
+	public int getTotal(Criteria cri) {
+		
+		return freeMapper.getTotal(cri);
 	}
 
 	

@@ -9,8 +9,14 @@
   		values(FREEBOARD_SEQ.nextval, #{title}, #{writer}, #{content} )
   	</insert>
   	
+  	<!-- 
   	<select id="getList" resultType="FreeBoardVO">
   		select * from FREEBOARD order by bno desc
+  	</select>
+  	 -->
+  	<!-- 전체게시글 수 -->
+  	<select id="getTotal" resultType="int">
+  		select count(*) as total from FREEBOARD
   	</select>
   	
   	<select id="getDetail" resultType="FreeBoardVO">
@@ -24,4 +30,38 @@
   	<delete id="delete">
   		delete from FREEBOARD where bno = #{bno}
   	</delete>
+  	<!-- CDATA안에 들어간는 순수한 문자열의 형태로 인식되도록 처리 -->
+  	<!-- if, choose는 jstl과 사용이 동일하고, test구문안에는 vo의 setter값이나 map의 key의 값이 들어갈 수 있습니다 -->
+  	<select id="getList" resultType="FreeBoardVO">
+  		<![CDATA[
+  	select *
+	from (select rownum rn, 
+                a.*
+    from (select *
+        from freeboard
+        where
+        ]]>
+ 
+			<if test="searchType == 'title'">title like '%'||#{searchName}||'%'</if>
+			<if test="searchType == 'writer'">writer like '%'||#{searchName}||'%'</if>
+			<if test="searchType == 'content'">content like '%'||#{searchName}||'%'</if>
+			<if test="searchType == 'titcont'">content like '%'||#{searchName}||'%' or title like '%'||#{searchName}||'%'</if>
+			<if test="searchType == null or searchType == ''">1=1</if>                	
+
+        	 <!-- 
+        	 <choose>
+        	 	<when test="searchType == 'title'">title like '%'||#{searchName}||'%'</when>
+        	 	<when test="searchType == 'writer'">writer like '%'||#{searchName}||'%'</when>
+        	 	<when test="searchType == 'content'">content like '%'||#{searchName}||'%'</when>
+        	 	<when test="searchType == 'titcont'">content like '%'||#{searchName}||'%' or title like '%'||#{serchName}||'%'</when>
+        	 </choose>
+        	  -->
+        <![CDATA[
+        ORDER BY bno desc
+        ) a
+	)
+	where rn > (#{pageNum}-1) * #{amount} and rn <= #{pageNum} * #{amount} 
+  		]]>
+
+  	</select>
   </mapper>
