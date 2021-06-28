@@ -185,7 +185,21 @@
 		    <groupId>org.apache.tiles</groupId>
 		    <artifactId>tiles-extras</artifactId>
 		    <version>3.0.8</version>
-		</dependency>      
+		</dependency>   
+		
+	<!-- REST API에서 JSON형태로 반환하는 라이브러리-->
+      <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-databind</artifactId>
+         <version>2.10.0</version>
+      </dependency>   
+      
+      <!-- REST API에서 객체를 XML형태로 변환하는 라이브러리 -->
+      <dependency>
+	    <groupId>com.fasterxml.jackson.dataformat</groupId>
+	    <artifactId>jackson-dataformat-xml</artifactId>
+	    <version>2.11.0</version>
+	</dependency>
 		        
 	</dependencies>
     <build>

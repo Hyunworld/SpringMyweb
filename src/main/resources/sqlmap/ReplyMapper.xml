@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.team404.reply.mapper.ReplyMapper">
+  	<insert id="regist">
+  		insert into FREEREPLY(rno, bno, reply, replyId, replyPw)
+  		values (FREEREPLY_SEQ.nextval, #{bno}, #{reply}, #{replyId}, #{replyPw})
+  	</insert>
+  	
+  	<select id="getList" resultType="com.team404.command.FreeReplyVO">
+  		<![CDATA[
+  		select *
+			from (
+			    select rownum rn,
+			            a.*,
+			            case when gap <= 60 then '방금전'
+			                when gap <= 60 * 24 then trunc(gap / 60) || '시간전'
+			                else to_char(replyDate, 'YYYY-MM-DD')
+			            end as timegap
+			    from (
+			        select bno, rno, reply, replyId, replyDate, updateDate, trunc((sysdate - replydate) * 24 * 60) as gap
+			        from FREEREPLY
+			        where bno = #{bno}
+			        order by rno desc
+			    ) a
+			) where rn > (#{cri.pageNum} - 1) * #{cri.amount} and rn <= #{cri.pageNum} * #{cri.amount}
+
+  		]]>
+  		
+  	</select>
+  	
+  	<select id="pwCheck" resultType = "int">
+  		select count(*) as count from FREEREPLY
+  		where rno = #{rno} and replyPw = #{replyPw}
+  	</select>
+  	
+  	<update id="update">
+  		update FREEREPLY
+  		set reply = #{reply},
+  			updateDate = sysdate
+  		where rno = #{rno}
+  	</update>
+  	
+  	<delete id="delete">
+  		delete 
+  		from FREEREPLY
+  		where rno = #{rno}
+  	</delete>
+  	
+  	<select id="getTotal" resultType="int">
+  		select count(*) as total from FREEREPLY where bno = #{bno}
+  	</select>
+  	
+  	
+  </mapper>
