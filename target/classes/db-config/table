@@ -23,3 +23,54 @@ create table FREEREPLY(
 );
 
 create SEQUENCE FREEREPLY_SEQ INCREMENT by 1 START with 1 nocache;
+
+
+select a.*, 
+        case when gap <= 60 then '방금전'
+            when gap <= 60 * 24 then trunc(gap / 60) || '시간전'
+            else to_char(replyDate, 'YYYY-MM-DD')
+        end as timegap
+from (
+    select bno, rno, reply, replyId, replyDate, updateDate, trunc((sysdate - replydate) * 24 * 60) as gap
+    from FREEREPLY
+    order by rno desc
+) a
+
+select *
+from (
+    select rownum rn,
+            a.*,
+            case when gap <= 60 then '방금전'
+                when gap <= 60 * 24 then trunc(gap / 60) || '시간전'
+                else to_char(replyDate, 'YYYY-MM-DD')
+            end as timegap
+    from (
+        select bno, rno, reply, replyId, replyDate, updateDate, trunc((sysdate - replydate) * 24 * 60) as gap
+        from FREEREPLY
+        where bno = 304
+        order by rno desc
+    ) a
+) where rn > 0 and rn <= 20;
+
+
+
+
+
+        
+        
+DECLARE 
+    var1 number := 1;
+begin
+
+    while var1 <= 100
+    loop 
+        insert into FREEREPLY(bno, rno, reply, replyId, replyPw) 
+        values(304, FREEBOARD_SEQ.nextval, 'test' ||var1, 'test'||var1, 'test'||var1);
+        
+        var1 := var1 + 1;
+        end loop;
+        commit;
+        
+end;
+
+select * from freereply
